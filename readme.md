@@ -7,4 +7,4 @@ Hacktiv8 - GLNG-KS07 - Kelompok 3<br />
 
 ## RailwayApp link
 <!-- Insert Link Here -->
-# golang_final_project3_hacktiv8
+https://final-project-2-production-c168.up.railway.app/
