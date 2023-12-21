@@ -54,3 +54,28 @@ func (ts *taskService) GetTasks() (*[]dto.GetTasksResponse, errs.Error) {
 	}
 	return response, nil
 }
+
+func (ts *taskService) UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.UpdateTaskResponse, errs.Error) {
+	validateErr := helpers.ValidateStruct(taskPayload)
+	if validateErr != nil {
+		return nil, validateErr
+	}
+	var task = entity.Task{
+		Title: taskPayload.Title,
+		Description: taskPayload.Description,
+	}
+	updateTask, err := ts.TaskRepo.UpdateTask(&task)
+	if err != nil {
+		return nil, err
+	}
+	response := dto.UpdateTaskResponse{
+		ID: updateTask.ID,
+		Title: updateTask.Title,
+		Description: updateTask.Description,
+		Status: updateTask.Status,
+		UserID: updateTask.UserID,
+		CategoryID: updateTask.CategoryID,
+		UpdatedAt: updateTask.UpdatedAt,
+	}
+	return &response, nil
+}

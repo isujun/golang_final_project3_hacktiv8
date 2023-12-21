@@ -37,3 +37,18 @@ type GetTaskUser struct {
 	Email    string `json:"email"`
 	FullName string `json:"full_name"`
 }
+
+type UpdateTaskRequest struct {
+	Title	    string `json:"title"`
+	Description string `json:"description"`
+}
+
+type UpdateTaskResponse struct {
+	ID		uint	`json:"id"`
+	Title		string	`json:"title"`
+	Description	string	`json:"description"`
+	Status		bool	`json:"status"`
+	UserID		uint	`json:"user_id"`
+	CategoryID	uint	`json:"category_id"`
+	UpdatedAt	time.Time `json:"update_at"`
+}
