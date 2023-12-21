@@ -62,6 +62,7 @@ func StartApp() {
 		{
 			taskRoute.GET("/", taskHandler.GetTasks)
 			taskRoute.POST("/", taskHandler.CreateTask)
+			taskRoute.PUT("/:taskId", taskHandler.UpdateTask)
 		}
 	}
 

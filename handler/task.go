@@ -5,6 +5,7 @@ import (
 	"final_project_3/pkg/errs"
 	"final_project_3/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -38,6 +39,30 @@ func (th *taskHandler) CreateTask(ctx *gin.Context) {
 func (th *taskHandler) GetTasks(ctx *gin.Context) {
 	response, err := th.taskService.GetTasks()
 	if err != nil {
+		ctx.JSON(err.Status(), err)
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}
+
+func (th taskHandler) UpdateTask(ctx *gin.Context) {
+	var taskPayload dto.UpdateTaskRequest
+	if err := ctx.ShouldBindJSON(&taskPayload); err != nil {
+		errBind := errs.NewUnprocessableEntityResponse("invalid request body")
+		ctx.JSON(errBind.Status(), errBind)
+		return
+	}
+	param := ctx.Param("taskId")
+	taskId, errConv := strconv.Atoi(param)
+	if errConv != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": errConv.Error(),
+		})
+		return
+	}
+	taskPayload.Title = strconv.Itoa(taskId) 
+	response, err := th.taskService.UpdateTask(&taskPayload)
+	if err != nil  {
 		ctx.JSON(err.Status(), err)
 		return
 	}

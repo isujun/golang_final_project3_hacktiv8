@@ -15,6 +15,7 @@ type taskService struct {
 type TaskService interface {
 	CreateTask(taskPayload *dto.NewTaskRequest) (*dto.NewTaskResponse, errs.Error)
 	GetTasks() (*[]dto.GetTasksResponse, errs.Error)
+	UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.UpdateTaskResponse, errs.Error) 
 }
 
 func NewTaskService(taskRepo task_repository.Repository) TaskService {

@@ -50,3 +50,12 @@ func (tr *taskRepo) GetTasks() (*[]dto.GetTasksResponse, errs.Error) {
 	}
 	return &res, nil
 }
+
+ func (tr *taskRepo) UpdateTask(taskPayload *entity.Task) (*entity.Task, errs.Error){
+	var Task = *taskPayload
+	err := tr.db.Model(&Task).Updates(map[string]interface{}{"title": Task.Title, "email": Task.Description}).Error
+	if err != nil {
+		return nil, errs.NewInternalServerError(err.Error())
+	}
+	return &Task, nil
+}
