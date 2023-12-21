@@ -63,6 +63,11 @@ func StartApp() {
 			taskRoute.GET("/", taskHandler.GetTasks)
 			taskRoute.POST("/", taskHandler.CreateTask)
 			taskRoute.PUT("/:taskId", taskHandler.UpdateTask)
+
+			taskRoute.Use(middlewares.Authentication())
+			{
+				taskRoute.PATCH("/update-status/:taskId", taskHandler.UpdateStatus)
+			}
 		}
 	}
 
