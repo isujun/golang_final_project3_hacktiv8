@@ -59,3 +59,12 @@ func (tr *taskRepo) GetTasks() (*[]dto.GetTasksResponse, errs.Error) {
 	}
 	return &Task, nil
 }
+
+func (tr *taskRepo) UpdateStatus(taskPayload *entity.Task) (*entity.Task, errs.Error) {
+	var Task = *taskPayload
+	err := tr.db.Model(&Task).Update("status", Task.Status).Error
+	if err != nil {
+		return nil, errs.NewInternalServerError(err.Error())
+	}
+	return &Task, nil
+}

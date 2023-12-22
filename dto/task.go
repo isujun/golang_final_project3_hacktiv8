@@ -52,3 +52,18 @@ type UpdateTaskResponse struct {
 	CategoryID	uint	`json:"category_id"`
 	UpdatedAt	time.Time `json:"update_at"`
 }
+
+
+type UpdateStatusResquest struct {
+	Status bool `json:"status"`
+}
+
+type UpdateStatusResponse struct {
+	ID		uint	`json:"id"`
+	Title		string	`json:"title"`
+	Description	string	`json:"description"`
+	Status		bool	`json:"status"`
+	UserID		uint	`json:"user_id"`
+	CategoryID	uint	`json:"category_id"`
+	UpdateAt	time.Time `json:"update_at"`
+}

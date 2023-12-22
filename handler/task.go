@@ -68,3 +68,27 @@ func (th taskHandler) UpdateTask(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (th *taskHandler) UpdateStatus(ctx *gin.Context) {
+	var taskPayload dto.UpdateStatusResponse
+	if err := ctx.ShouldBindJSON(&taskPayload); err != nil {
+		errBinJson := errs.NewUnprocessableEntityResponse("invalid json request body")
+		ctx.JSON(errBinJson.Status(), errBinJson)
+		return
+	}
+	param := ctx.Param("taskId")
+	taskId, errConv := strconv.ParseBool(param)
+	if errConv != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": errConv.Error(),
+		})
+		return
+	}
+	taskPayload.Status = bool(taskId)
+	response, err := th.taskService.UpdateStatus(&taskPayload)
+	if err != nil {
+		ctx.JSON(err.Status(), err)
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}

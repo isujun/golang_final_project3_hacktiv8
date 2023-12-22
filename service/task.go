@@ -16,6 +16,7 @@ type TaskService interface {
 	CreateTask(taskPayload *dto.NewTaskRequest) (*dto.NewTaskResponse, errs.Error)
 	GetTasks() (*[]dto.GetTasksResponse, errs.Error)
 	UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.UpdateTaskResponse, errs.Error) 
+	UpdateStatus(taskPayload *dto.UpdateStatusResquest) (*dto.UpdateStatusResponse, errs.Error)
 }
 
 func NewTaskService(taskRepo task_repository.Repository) TaskService {
@@ -77,6 +78,29 @@ func (ts *taskService) UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.Upda
 		UserID: updateTask.UserID,
 		CategoryID: updateTask.CategoryID,
 		UpdatedAt: updateTask.UpdatedAt,
+	}
+	return &response, nil
+}
+
+func (ts *taskService) UpdateStatus(taskPayload *dto.UpdateStatusResquest) (*dto.UpdateStatusResponse, errs.Error){
+	validateErr := helpers.ValidateStruct(taskPayload)
+	if validateErr!= nil {
+		return nil, validateErr
+	}
+	var status = entity.Task{
+		Status: taskPayload.Status,
+	}
+	updateStatus, err := ts.TaskRepo.UpdateStatus(&status)
+	if err != nil {
+		return nil, err
+	}
+	response := dto.UpdateStatusResponse{
+		ID: updateStatus.ID,
+		Title: updateStatus.Title,
+		Status: updateStatus.Status,
+		UserID: updateStatus.UserID,
+		CategoryID: updateStatus.CategoryID,
+		UpdateAt: updateStatus.UpdatedAt,
 	}
 	return &response, nil
 }
