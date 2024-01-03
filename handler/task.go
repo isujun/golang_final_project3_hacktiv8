@@ -70,7 +70,7 @@ func (th taskHandler) UpdateTask(ctx *gin.Context) {
 }
 
 func (th *taskHandler) UpdateStatus(ctx *gin.Context) {
-	var taskPayload dto.UpdateStatusResponse
+	var taskPayload dto.UpdateStatusResquest
 	if err := ctx.ShouldBindJSON(&taskPayload); err != nil {
 		errBinJson := errs.NewUnprocessableEntityResponse("invalid json request body")
 		ctx.JSON(errBinJson.Status(), errBinJson)
