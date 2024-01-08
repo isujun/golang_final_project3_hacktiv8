@@ -17,6 +17,7 @@ type TaskService interface {
 	GetTasks() (*[]dto.GetTasksResponse, errs.Error)
 	UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.UpdateTaskResponse, errs.Error) 
 	UpdateStatus(taskPayload *dto.UpdateStatusResquest) (*dto.UpdateStatusResponse, errs.Error)
+	UpdateTaskCategory(taskPayload *dto.UpdateTaskCategoryRequest) (*dto.UpdateTaskCategoryResponse, errs.Error)
 }
 
 func NewTaskService(taskRepo task_repository.Repository) TaskService {
@@ -101,6 +102,31 @@ func (ts *taskService) UpdateStatus(taskPayload *dto.UpdateStatusResquest) (*dto
 		UserID: updateStatus.UserID,
 		CategoryID: updateStatus.CategoryID,
 		UpdateAt: updateStatus.UpdatedAt,
+	}
+	return &response, nil
+}
+
+func (ts *taskService) UpdateTaskCategory(taskPayload *dto.UpdateTaskCategoryRequest) (*dto.UpdateTaskCategoryResponse, errs.Error) {
+	validateErr := helpers.ValidateStruct(taskPayload)
+	if validateErr != nil {
+		return nil, validateErr
+	}	
+	var task = entity.Task{
+		ID: taskPayload.ID,
+		CategoryID: taskPayload.CategoryID,
+	}
+	updateTask, err := ts.TaskRepo.UpdateTaskCategory(&task)
+	if err != nil {
+		return nil, err
+	}
+	response := dto.UpdateTaskCategoryResponse{
+		ID: updateTask.ID,
+		Title: updateTask.Title,
+		Description: updateTask.Description,
+		Status: updateTask.Status,
+		UserID: updateTask.UserID,
+		CategoryId: updateTask.CategoryID,
+		UpdatedAt: updateTask.UpdatedAt,
 	}
 	return &response, nil
 }

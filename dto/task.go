@@ -44,7 +44,7 @@ type UpdateTaskRequest struct {
 }
 
 type UpdateTaskResponse struct {
-	ID		uint	`json:"id"`
+	ID			uint	`json:"id"`
 	Title		string	`json:"title"`
 	Description	string	`json:"description"`
 	Status		bool	`json:"status"`
@@ -59,11 +59,16 @@ type UpdateStatusResquest struct {
 }
 
 type UpdateStatusResponse struct {
-	ID		uint	`json:"id"`
+	ID			uint	`json:"id"`
 	Title		string	`json:"title"`
 	Description	string	`json:"description"`
 	Status		bool	`json:"status"`
 	UserID		uint	`json:"user_id"`
 	CategoryID	uint	`json:"category_id"`
 	UpdateAt	time.Time `json:"update_at"`
+}
+
+type UpdateTaskCategoryRequest struct {
+	ID 			uint `json:"id"`
+	CategoryID 	uint `json:"category_id" validate:"required"`
 }
