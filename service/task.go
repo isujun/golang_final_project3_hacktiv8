@@ -18,6 +18,7 @@ type TaskService interface {
 	UpdateTask(taskPayload *dto.UpdateTaskRequest) (*dto.UpdateTaskResponse, errs.Error) 
 	UpdateStatus(taskPayload *dto.UpdateStatusResquest) (*dto.UpdateStatusResponse, errs.Error)
 	UpdateTaskCategory(taskPayload *dto.UpdateTaskCategoryRequest) (*dto.UpdateTaskCategoryResponse, errs.Error)
+	DeleteTask(id int) errs.Error
 }
 
 func NewTaskService(taskRepo task_repository.Repository) TaskService {
@@ -129,4 +130,12 @@ func (ts *taskService) UpdateTaskCategory(taskPayload *dto.UpdateTaskCategoryReq
 		UpdatedAt: updateTask.UpdatedAt,
 	}
 	return &response, nil
+}
+
+func (ts *taskService) DeleteTask(id int) errs.Error  {
+	err := ts.TaskRepo.DeleteTask(id)
+	if err != nil {
+		return err
+	}	
+	return nil
 }

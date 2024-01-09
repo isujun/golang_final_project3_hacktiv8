@@ -66,10 +66,11 @@ func StartApp() {
 
 			taskRoute.Use(middlewares.Authentication())
 			{
-				taskRoute.PATCH("/update-status/:taskId", taskandler.UpdateStatus)
+				taskRoute.PATCH("/update-status/:taskId", taskHandler.UpdateStatus)
 				taskRoute.PATCH("/update-category/:taskId", taskHandler.UpdateTaskCategory)
 			}
 			taskRoute.DELETE("/:taskId", taskHandler.DeleteTask)
+
 		}
 	}
 

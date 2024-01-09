@@ -92,3 +92,47 @@ func (th *taskHandler) UpdateStatus(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (th *taskHandler) UpdateTaskCategory(ctx *gin.Context) {
+	var taskPayload dto.UpdateTaskCategoryRequest
+	if err := ctx.ShouldBindJSON(&taskPayload); err != nil{
+		errBind := errs.NewUnprocessableEntityResponse("invalid request body")
+		ctx.JSON(errBind.Status(), errBind)
+		return
+	}
+	param := ctx.Param("taskId")
+	taskId, errConv := strconv.Atoi(param)
+	if errConv != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": errConv.Error(),
+		})
+		return
+	}
+	taskPayload.ID = uint(taskId)
+response, err := th.taskService.UpdateTaskCategory(&taskPayload)
+if err != nil {
+	ctx.JSON(err.Status(), err)
+	return
+}
+ctx.JSON(http.StatusOK, response)
+}
+
+func (th *taskHandler) DeleteTask(ctx *gin.Context) {
+	param := ctx.Param("taskId")
+	taskId, errconv := strconv.Atoi(param)
+	if errconv != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": errconv.Error(),
+		})
+		return
+	}
+	err := th.taskService.DeleteTask(taskId)
+	if err != nil {
+		ctx.JSON(err.Status(), err)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Task has been successfully deleted",
+	})
+}
+

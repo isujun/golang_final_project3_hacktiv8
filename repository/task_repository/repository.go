@@ -11,4 +11,6 @@ type Repository interface {
 	GetTasks() (*[]dto.GetTasksResponse, errs.Error)
 	UpdateTask(taskPayload *entity.Task) (*entity.Task, errs.Error)
 	UpdateStatus(taskPayload *entity.Task) (*entity.Task, errs.Error)
+	UpdateTaskCategory(taskPayload *entity.Task) (*entity.Task, errs.Error)
+	DeleteTask(id int) errs.Error
 }

@@ -1,10 +1,12 @@
 package task_repo
 
 import (
+	"errors"
 	"final_project_3/dto"
 	"final_project_3/entity"
 	"final_project_3/pkg/errs"
 	"final_project_3/repository/task_repository"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -67,4 +69,25 @@ func (tr *taskRepo) UpdateStatus(taskPayload *entity.Task) (*entity.Task, errs.E
 		return nil, errs.NewInternalServerError(err.Error())
 	}
 	return &Task, nil
+}
+
+func (tr *taskRepo) UpdateTaskCategory(taskPayload *entity.Task) (*entity.Task, errs.Error){
+	var Task = *taskPayload
+	err := tr.db.Model(&Task).Update("category_id", Task.CategoryID).First(&Task).Error
+ 	if err != nil {
+		return nil, errs.NewInternalServerError(err.Error())
+	}
+	return &Task, nil
+}
+
+func (tr *taskRepo) DeleteTask(id int) (errs.Error) {
+	err := tr.db.Where("id = ?", id).Delete(&entity.Task{}).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+		msg := "todo with id: " + strconv.Itoa(id) + " not found"
+		return errs.NewNotFoundError(msg)
+		}
+		return errs.NewInternalServerError("something went wrong")
+	}
+	return nil
 }

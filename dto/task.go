@@ -72,3 +72,13 @@ type UpdateTaskCategoryRequest struct {
 	ID 			uint `json:"id"`
 	CategoryID 	uint `json:"category_id" validate:"required"`
 }
+
+type UpdateTaskCategoryResponse struct {
+	ID 			uint `json:"id"`
+	Title 		string `json:"title"`
+	Description string `json:"description"`
+	Status 		bool `json:"status"`
+	UserID 		uint `json:"user_id"`
+	CategoryId 	uint `json:"category_id"`
+	UpdatedAt 	time.Time `json:"update_at"`
+}
